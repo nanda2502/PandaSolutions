@@ -1,0 +1,66 @@
+
+variables.
+var_name:"var_label":var_type
+
+// var_type can be one of: continuous, factor, dummy. ordinal variables are not supported
+// factor and dummy expect a levels and a labels list, like this:
+// SES:factor
+// levels[0 1 2]
+// labels["low" "middle" "high"] 
+
+descriptives.
+grouping.. // optional, default is none, only one grouping variable is allowed - has to be of type factor or dummy
+means_sd.. //not sure about the best name here
+include/exclude... //by default, all continuous variables will be included and all factors/dummy variables will be excluded
+
+correlations.. // provides a correlation table that is combined with the means table if both are present
+include/exclude... //by default, all continuous and categorical variables will be included and all factors/dummy variables will be excluded
+
+proportions.. // provides a table with proportions for factors/dummy variables
+
+inferentials.
+
+lm..
+block... # //optional block notation for hierarchical analyses
+var_name:var_type
+interactions....
+all // all possible interactions excluding covariates
+all:# // all #-way interactions and lower, i.e. 2 for 2-way, 3 for 3-way and 2-way, etc.
+var_name:var_name // specific interaction
+assumptions... // optional, default is all
+all // normality, homoscedasticity, linearity, independence, multicollinearity, outliers, outliers_uni, outliers_multi, 
+
+// example
+variables.
+    heart_rate:"Heart Rate":continuous
+    consc:Conscientiousness:continuous
+    neurot:Neuroticism:continuous
+    age:Age:continuous
+    gender:Gender:dummy
+        levels[0 1]
+        labels[Women Men]
+    condition:Condition:factor
+        levels[0 1 2]
+        labels[Control "Social Stress"]
+
+descriptives.
+    means_sd..
+    correlations..
+
+inferentials
+    lm..
+        block 1...
+            heart_rate:dependent
+            age:covariate
+            gender:covariate
+        block 2...
+            consc:independent
+            neurot:independent
+        block 3...
+            interactions....
+                consc:neurot
+        assumptions...
+            normality
+            homoscedasticity
+            linearity
+            outliers_multi

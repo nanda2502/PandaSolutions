@@ -1,0 +1,33 @@
+variables
+    heart_rate:"Heart Rate":continuous
+    consc:Conscientiousness:continuous
+    neurot:Neuroticism:continuous
+    age:Age:continuous
+    gender:Gender:dummy
+        levels[0 1]
+        labels[Women Men]
+    condition:Condition:factor
+        levels[0 1 2]
+        labels[Control "Social Stress"]
+
+descriptives
+    means_sd
+    correlations
+
+inferentials
+    lm
+        block 1
+            heart_rate:dependent
+            age:covariate
+            gender:covariate
+        block 2
+            consc:independent
+            neurot:independent
+        block 3
+            interactions
+                consc:neurot
+        assumptions
+            normality
+            homoscedasticity
+            linearity
+            outliers_multi
